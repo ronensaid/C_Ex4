@@ -79,7 +79,7 @@ int i = 0;
 while (i < dist_length)
 {
     is_v[i] = 0;
-    if (get_node(head, i) == NULL)
+    if (get_node_recursive(head, i) == NULL)
         is_v[i] = 1;
     i++;
 }
@@ -95,7 +95,7 @@ dist[src] = 0;
 int min;
 while (!is_empty(is_v, dist_length) && (min = Minimum(dist, is_v, dist_length)) != -1)
 {
-    pnode p = get_node(head, min);
+    pnode p = get_node_recursive(head, min);
     pedge edge = p->edges;
     while (edge)
     {

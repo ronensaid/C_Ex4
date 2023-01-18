@@ -3,7 +3,7 @@
 
 
 
-pnode get_node(pnode NODE, int ID);
+pnode get_node_recursive(pnode NODE, int ID);
   
 void insert_node_cmd(pnode *head);
   
