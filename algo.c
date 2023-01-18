@@ -8,7 +8,7 @@
 
 
 
-int maximum(pnode NODE)
+int maximum_key(pnode NODE)
 {
     if (NODE == NULL)
     {
@@ -28,11 +28,11 @@ int maximum(pnode NODE)
     return max;
 }
 
-bool is_empty(int v[], int len)
+bool is_empty(int is_v[], int length)
 {
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < length; i++)
     {
-        if (!v[i])//is visited
+        if (!is_v[i])//is visited
         {
             return false;
         }
@@ -42,20 +42,20 @@ bool is_empty(int v[], int len)
 
 
 
-int minimum(int dist[], int v[], int len)
+int Minimum(int dist[], int is_v[], int length)
 {
     int min = -1;
 
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < length; i++)
     {
         if (min == -1)
         {
-            if (dist[i] != INFINITY && !v[i])
+            if (dist[i] != INFINITY && !is_v[i])
                 min = i;
         }
 
 
-        else if (dist[i] != INFINITY && dist[i] < dist[min] && !v[i])
+        else if (dist[i] != INFINITY && dist[i] < dist[min] && !is_v[i])
             min = i;
     }
 
@@ -66,39 +66,43 @@ int minimum(int dist[], int v[], int len)
 
 
 
+
+
+
+
 int Dijkstra_Algorithm(pnode head, int src, int dest)
 {
     if (head == NULL)
         return -1;
 
-    int dist_len = maximum(head) + 1;
+    int dist_length = maximum_key(head) + 1;
 
 
-    int *dist = (int *)malloc(sizeof(int) * dist_len);
+    int *dist = (int *)malloc(sizeof(int) * dist_length);
 
-    int *v = (int *)malloc(sizeof(int) * dist_len);
+    int *is_v = (int *)malloc(sizeof(int) * dist_length);
 
     
-    for (int i = 0; i < dist_len; i++)
+    for (int i = 0; i < dist_length; i++)
     {
-        v[i] = 0;
+        is_v[i] = 0;
         if (get_node(head, i) == NULL)
-            v[i] = 1;
+            is_v[i] = 1;
     }
 
     
-    for (int i = 0; i < dist_len; i++)
+    for (int i = 0; i < dist_length; i++)
         dist[i] = INFINITY;
     dist[src] = 0;
 
     int min;
-    while (!is_empty(v, dist_len) && (min = minimum(dist, v, dist_len)) != -1)
+    while (!is_empty(is_v, dist_length) && (min = Minimum(dist, is_v, dist_length)) != -1)
     {
         pnode p = get_node(head, min);
         pedge edge = p->edges;
         while (edge)
         {
-            if (!v[edge->endpoint->node_num])
+            if (!is_v[edge->endpoint->node_num])
             {
                 if (dist[p->node_num] != INFINITY && dist[p->node_num] + edge->weight < dist[edge->endpoint->node_num])
                 {
@@ -107,11 +111,11 @@ int Dijkstra_Algorithm(pnode head, int src, int dest)
             }
             edge = edge->next;
         }
-        v[min] = 1;
+        is_v[min] = 1;
     }
 
  
-    free(v);
+    free(is_v);
 
     if (dist[dest] == INFINITY)
     {
@@ -143,10 +147,10 @@ void shortsPath_cmd(pnode head)
     printf("Dijsktra shortest path: %d \n", ans);
 }
 
-int *delete_from_array(int arr[], int len, int k)
+int *delete_from_array(int arr[], int length, int k)
 {
-    int *new_array = (int *)malloc(sizeof(int) * len - 1);
-    for (int i = 0, j = 0; i < len; i++)
+    int *new_array = (int *)malloc(sizeof(int) * length - 1);
+    for (int i = 0, j = 0; i < length; i++)
     {
         if (i != k)
         {
@@ -160,9 +164,9 @@ int *delete_from_array(int arr[], int len, int k)
 
 
 
-void printArr(int arr[], int len)
+void printArr(int arr[], int length)
 {
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < length; i++)
         printf("%d ,", arr[i]);
 
     printf("\n");
@@ -173,22 +177,22 @@ void printArr(int arr[], int len)
 
 
 
-int helper(pnode head, int src, int arr[], int len)
+int helper(pnode head, int src, int arr[], int length)
 {
-    if (len == 1)
+    if (length == 1)
         return Dijkstra_Algorithm(head, src, arr[0]);
 
     int min = INFINITY;
 
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < length; i++)
     {
         if (i != src)
         {
-            int *p = delete_from_array(arr, len, i);
+            int *p = delete_from_array(arr, length, i);
 
             int _shortest = Dijkstra_Algorithm(head, src, arr[i]);
 
-            int ans = helper(head, arr[i], p, len - 1);
+            int ans = helper(head, arr[i], p, length - 1);
 
             if (_shortest != -1 && ans != -1 && ans + _shortest < min)
                 min = ans + _shortest;

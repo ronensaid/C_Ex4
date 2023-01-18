@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
+
 #include "graph.h"
 
 
 
-int main()
+void main()
 {
 
     
@@ -38,7 +39,7 @@ int main()
             
             
             if(ch=='A'){
-                build_graph_cmd(&G);
+                ch = build_graph_cmd(&G);
                 temp = 1;
                 
             }
@@ -74,7 +75,5 @@ int main()
     
     
      deleteGraph_cmd(&G);
-
-return 1;
     
 }

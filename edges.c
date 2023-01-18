@@ -1,7 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+
 #include "graph.h"
 #include "nodes.h"
+
+
+
+
+
+
 
 
 //Adding an edge (source,destination,weight)
@@ -48,6 +56,9 @@ void print_edges(pnode node)
     
     printf("node %d edges are :\n", node->node_num);
 
+
+
+
     while (Edge)
     {
         printf("id %d weight %d , ", Edge->endpoint->node_num, Edge->weight);
@@ -57,9 +68,10 @@ void print_edges(pnode node)
     printf("\n");
 }
 
-// delete out edges
-void delete_out(pnode n)
+
+void remove_out(pnode n)
 {
+    // delete out edges
     pedge ed = n->edges;
     while (ed)
     {
@@ -110,4 +122,5 @@ void remove_edge(pnode NODE, pnode n)
         free(e);
     }
 }
+
 
