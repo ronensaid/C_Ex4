@@ -23,7 +23,7 @@ void insert_node_cmd(pnode *head)
 
     pnode new_node = get_node(*head, ID);
 
-    int noode = 0;
+    int is_there_node = 0;
 
 
     if (new_node == NULL)
@@ -40,8 +40,8 @@ void insert_node_cmd(pnode *head)
 
     else
     {
-        noode = 1;
-        remove_out(new_node);
+        is_there_node = 1;
+        delete(new_node);
     }
 
     // insert edges
@@ -52,7 +52,7 @@ void insert_node_cmd(pnode *head)
         add_edge(new_node, get_node(*head, dest), weight);
     }
 
-    if (noode)
+    if (is_there_node)
         return;
 
     if (!*head)
@@ -126,7 +126,7 @@ void deleteGraph_cmd(pnode *head)
 
     while (p)
     {
-        remove_out(p);
+        delete(p);
         pnode temp = p;
         p = p->next;
         free(temp);

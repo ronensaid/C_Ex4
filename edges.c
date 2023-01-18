@@ -10,6 +10,8 @@
 
 
 
+
+
 //Adding an edge (source,destination,weight)
 void add_edge(pnode Src, pnode Dest, int Weight)
 {
@@ -67,7 +69,7 @@ void print_edges(pnode node)
 }
 
 
-void remove_out(pnode n)
+void delete(pnode n)
 {
     // delete out edges
     pedge ed = n->edges;
