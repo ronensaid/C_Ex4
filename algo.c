@@ -175,40 +175,27 @@ void printArr(int arr[], int len)
 
 
 
-
-
 int helper(pnode head, int src, int arr[], int len)
 {
-    if (len == 1)
-        return Dijkstra_Algorithm(head, src, arr[0]);
-
     int min = INFINITY;
 
     for (int i = 0; i < len; i++)
     {
         if (i != src)
         {
-            int *p = delete_from_array(arr, len, i);
-
             int _shortest = Dijkstra_Algorithm(head, src, arr[i]);
-
-            int ans = helper(head, arr[i], p, len - 1);
-
-            if (_shortest != -1 && ans != -1 && ans + _shortest < min)
-                min = ans + _shortest;
-
-            free(p);
+            if (_shortest != -1 && _shortest < min)
+                min = _shortest;
         }
     }
 
     if (min == INFINITY)
         return -1;
 
-
-
-
     return min;
 }
+
+
 
 
 
