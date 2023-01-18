@@ -4,66 +4,110 @@
 #include "nodes.h"
 
 
+//Adding an edge (source,destination,weight)
 void add_edge(pnode Src, pnode Dest, int Weight)
 {
     if (!Src || !Dest)
         return;
     
     pedge new_edge = (pedge)malloc(sizeof(edge));
+
+    new_edge->next = NULL;
+
     new_edge->weight = Weight;
+
     new_edge->endpoint = Dest;
-    new_edge->next = Src->edges;
-    Src->edges = new_edge;
+
+    pedge EDG = Src->edges;
+
+    while (EDG && EDG->next)
+    {
+
+        EDG = EDG->next;
+    }
+
+    if (!EDG)
+    {
+        Src->edges = new_edge;
+        return;
+    }
+
+    EDG->next = new_edge;
 }
+
+
+
+
+//printing the edges
 void print_edges(pnode node)
 {
     if (node == NULL)
         return;
+
+    pedge Edge = node->edges;
+    
     printf("node %d edges are :\n", node->node_num);
-    for(pedge Edge = node->edges; Edge != NULL; Edge = Edge->next)
+
+    while (Edge)
     {
         printf("id %d weight %d , ", Edge->endpoint->node_num, Edge->weight);
+        
+        Edge = Edge->next;
     }
     printf("\n");
 }
-void remove_out(pnode n)
+
+// delete out edges
+void delete_out(pnode n)
 {
-    if(n == NULL) return;
-    pedge *ed = &n->edges;
-    while (*ed)
+    pedge ed = n->edges;
+    while (ed)
     {
-        pedge e = *ed;
-        *ed = e->next;
+        pedge e = ed;
+        ed = ed->next;
         free(e);
     }
+    n->edges = NULL;
 }
+
+
 
 
 void remove_edge(pnode NODE, pnode n)
 {
-    if (NODE == NULL || n == NULL)
+    if (NODE == NULL)
         return;
-    pedge *ed;
-    for(; NODE != NULL; NODE = NODE->next)
+
+    
+    while (NODE)//deleting the coming edges
     {
-        ed = &NODE->edges;
-        while (*ed)
+        pedge p = NODE->edges;
+        pedge *previous = &NODE->edges;
+        while (p)
         {
-            if ((*ed)->endpoint == n)
+            if (p->endpoint == n)
             {
-                pedge e = *ed;
-                *ed = e->next;
-                free(e);
+                *previous = p->next;
+                free(p);
+                p = *previous;
             }
-            else ed = &(*ed)->next;
+            else
+            {
+                previous = &(p->next);
+                p = p->next;
+            }
         }
+
+        NODE = NODE->next;
     }
 
-    ed = &n->edges;
-    while (*ed)
+    
+    pedge ed = n->edges;//deleting going out edges
+    while (ed)
     {
-        pedge e = *ed;
-        *ed = e->next;
+        pedge e = ed;
+        ed = ed->next;
         free(e);
     }
 }
+

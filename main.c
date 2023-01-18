@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
-#include "algo.h"
-#include "nodes.h"
-#include "edges.h"
 #include "graph.h"
 
 
@@ -77,6 +74,7 @@ int main()
     
     
      deleteGraph_cmd(&G);
-     return 0;
+
+return 1;
     
 }

@@ -3,13 +3,18 @@
 #include "graph.h"
 #include "edges.h"
 
-pnode get_node_recursive(pnode NODE, int ID)
+
+//Helping function used in other functions to get a node
+pnode get_node(pnode NODE, int ID)
 {
-    if(NODE == NULL)
+
+    while (NODE && NODE->node_num != ID)
+    {
+        NODE = NODE->next;
+    }
+    if (!NODE)
         return NULL;
-    if(NODE->node_num == ID)
-        return NODE;
-    return get_node_recursive(NODE->next, ID);
+    return NODE;
 }
 
 void insert_node_cmd(pnode *head)
@@ -17,38 +22,53 @@ void insert_node_cmd(pnode *head)
     int ID;
     scanf("%d", &ID);
 
-    pnode new_node = get_node_recursive(*head, ID);
+    pnode new_node = get_node(*head, ID);
+
+    int is_there_node = 0;
+
 
     if (new_node == NULL)
     {
         new_node = (pnode)malloc(sizeof(node));
+
+        new_node->next = NULL;
+
         new_node->node_num = ID;
+
         new_node->edges = NULL;
     }
+
+
     else
     {
-        remove_out(new_node);
+        is_there_node = 1;
+        delete_out(new_node);
     }
 
-    pnode last = *head;
-    while (last != NULL && last->next != NULL)
-        last = last->next;
-
-    new_node->next = NULL;
-    if (last == NULL)
-        *head = new_node;
-    else
-        last->next = new_node;
-
+    // insert edges
     int weight, dest;
     while (scanf("%d", &dest) > 0)
     {
         scanf("%d", &weight);
-        add_edge(new_node, get_node_recursive(*head, dest), weight);
+        add_edge(new_node, get_node(*head, dest), weight);
     }
 
-}
+    if (is_there_node)
+        return;
 
+    if (!*head)
+    {
+        *head = new_node;
+        return;
+    }
+
+    pnode p = *head;
+    while (p->next)
+    {
+        p = p->next;
+    }
+    p->next = new_node;
+}
 
 void delete_node_cmd(pnode *head)
 {
@@ -58,43 +78,45 @@ void delete_node_cmd(pnode *head)
     int ID;
     scanf("%d", &ID);
 
-    pnode prev = NULL;
-    pnode curr = *head;
+    pnode p = *head;
 
-    // Find the node to delete
-    while (curr != NULL && curr->node_num != ID)
+
+    pnode *previous = head;
+
+
+
+    while (p)
     {
-        prev = curr;
-        curr = curr->next;
+        if (p->node_num == ID)
+        {
+            break;
+        }
+        else
+        {
+            previous = &(p->next);
+            p = p->next;
+        }
     }
 
-    if (curr == NULL)
+    if (!p)
         return;
 
-    // Delete edges
-    remove_edge(*head, curr);
-
-    // Remove the node from the linked list
-    if (prev == NULL)
-        *head = curr->next;
-    else
-        prev->next = curr->next;
-
-    // Free the node
-    free(curr);
+    // delete edges
+    remove_edge(*head, p);
+    // free node
+    *previous = p->next;
+    free(p);
 }
-
 
 void printGraph_cmd(pnode head)
 {
-    pnode current = head;
-    for(int i = 0; current != NULL; i++)
+    while (head)
     {
-        printf("\\%d\\  \n", current->node_num);//the id/key
+        printf("\\%d\\  \n", head->node_num);//the id/key
 
-        print_edges(current);//printing the edges
+        print_edges(head);//printing the edges
 
-        current = current->next;
+        head = head->next;
     }
 }
 
@@ -102,11 +124,16 @@ void deleteGraph_cmd(pnode *head)
 {
     pnode p = *head;
 
-    for (; p != NULL; p = p->next)
+
+    while (p)
     {
-        remove_out(p);
-        free(p);
+        delete_out(p);
+        pnode temp = p;
+        p = p->next;
+        free(temp);
     }
+
+
 
     *head = NULL;
 }
@@ -147,12 +174,12 @@ void build_graph_cmd(pnode *head)
 
             // Adding edges
             int weight, dest;
-            pnode node = get_node_recursive(*head, ID);
+            pnode node = get_node(*head, ID);
 
             while (scanf("%d", &dest) > 0)
             {
                 scanf("%d", &weight);
-                add_edge(node, get_node_recursive(*head, dest), weight);
+                add_edge(node, get_node(*head, dest), weight);
             }
         }
 
@@ -161,4 +188,5 @@ void build_graph_cmd(pnode *head)
             condition = 0;
         }
     }
+
 }
