@@ -1,11 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+
 #include "graph.h"
 #include "edges.h"
 
 
-//Helping function used in other functions to get a node
-pnode get_node(pnode NODE, int ID)
+
+
+
+
+
+
+
+//Helping function used in other functions
+pnode get_node(pnode NODE, int ID)//return the node (getting the node)
 {
 
     while (NODE && NODE->node_num != ID)
@@ -42,7 +51,7 @@ void insert_node_cmd(pnode *head)
     else
     {
         is_there_node = 1;
-        delete_out(new_node);
+        remove_out(new_node);
     }
 
     // insert edges
@@ -127,7 +136,7 @@ void deleteGraph_cmd(pnode *head)
 
     while (p)
     {
-        delete_out(p);
+        remove_out(p);
         pnode temp = p;
         p = p->next;
         free(temp);
@@ -138,7 +147,7 @@ void deleteGraph_cmd(pnode *head)
     *head = NULL;
 }
 
-void build_graph_cmd(pnode *head)
+char build_graph_cmd(pnode *head)
 {
     if (*head)
         deleteGraph_cmd(head);
@@ -189,4 +198,8 @@ void build_graph_cmd(pnode *head)
         }
     }
 
+
+
+
+    return C;
 }
