@@ -147,7 +147,7 @@ void shortsPath_cmd(pnode head)
     printf("Dijsktra shortest path: %d \n", ans);
 }
 
-int *delete_from_array(int arr[], int length, int k)
+int *delete_from_array(int arr[], int len, int k)
 {
     int *new_array = (int *)malloc(sizeof(int) * len - 1);
     for (int i = 0, j = 0; i < len; i++)
