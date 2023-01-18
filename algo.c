@@ -16,17 +16,17 @@ int maximum_key(pnode NODE)
     }
 
     int max = NODE->node_num;
-    for(pnode temp = NODE; temp!=NULL; temp = temp->next)
+    while (NODE)
     {
-        if (temp->node_num > max)
+        if (NODE->node_num > max)
         {
-            max = temp->node_num;
+            max = NODE->node_num;
         }
+        NODE = NODE->next;
     }
 
     return max;
 }
-
 
 bool is_empty(int is_v[], int length)
 {
@@ -44,18 +44,23 @@ bool is_empty(int is_v[], int length)
 
 int Minimum(int dist[], int is_v[], int length)
 {
-    int min = -1, i = 0;
-    while (i < length)
+    int min = -1;
+
+    for (int i = 0; i < length; i++)
     {
         if (min == -1)
         {
             if (dist[i] != INFINITY && !is_v[i])
                 min = i;
         }
+
+
         else if (dist[i] != INFINITY && dist[i] < dist[min] && !is_v[i])
             min = i;
-        i++;
     }
+
+
+
     return min;
 }
 
@@ -63,65 +68,64 @@ int Minimum(int dist[], int is_v[], int length)
 
 
 
+
+
 int Dijkstra_Algorithm(pnode head, int src, int dest)
 {
-if (head == NULL)
-{
-return -1;
-}
-int dist_length = maximum_key(head) + 1;
+    if (head == NULL)
+        return -1;
 
-int *dist = (int *)malloc(sizeof(int) * dist_length);
+    int dist_length = maximum_key(head) + 1;
 
-int *is_v = (int *)malloc(sizeof(int) * dist_length);
 
-int i = 0;
-while (i < dist_length)
-{
-    is_v[i] = 0;
-    if (get_node_recursive(head, i) == NULL)
-        is_v[i] = 1;
-    i++;
-}
+    int *dist = (int *)malloc(sizeof(int) * dist_length);
 
-i = 0;
-while (i < dist_length)
-{
-    dist[i] = INFINITY;
-    i++;
-}
-dist[src] = 0;
+    int *is_v = (int *)malloc(sizeof(int) * dist_length);
 
-int min;
-while (!is_empty(is_v, dist_length) && (min = Minimum(dist, is_v, dist_length)) != -1)
-{
-    pnode p = get_node_recursive(head, min);
-    pedge edge = p->edges;
-    while (edge)
+    
+    for (int i = 0; i < dist_length; i++)
     {
-        if (!is_v[edge->endpoint->node_num])
-        {
-            if (dist[p->node_num] != INFINITY && dist[p->node_num] + edge->weight < dist[edge->endpoint->node_num])
-            {
-                dist[edge->endpoint->node_num] = dist[p->node_num] + edge->weight;
-            }
-        }
-        edge = edge->next;
+        is_v[i] = 0;
+        if (get_node(head, i) == NULL)
+            is_v[i] = 1;
     }
-    is_v[min] = 1;
-}
 
-free(is_v);
+    
+    for (int i = 0; i < dist_length; i++)
+        dist[i] = INFINITY;
+    dist[src] = 0;
 
-if (dist[dest] == INFINITY)
-{
+    int min;
+    while (!is_empty(is_v, dist_length) && (min = Minimum(dist, is_v, dist_length)) != -1)
+    {
+        pnode p = get_node(head, min);
+        pedge edge = p->edges;
+        while (edge)
+        {
+            if (!is_v[edge->endpoint->node_num])
+            {
+                if (dist[p->node_num] != INFINITY && dist[p->node_num] + edge->weight < dist[edge->endpoint->node_num])
+                {
+                    dist[edge->endpoint->node_num] = dist[p->node_num] + edge->weight;
+                }
+            }
+            edge = edge->next;
+        }
+        is_v[min] = 1;
+    }
+
+ 
+    free(is_v);
+
+    if (dist[dest] == INFINITY)
+    {
+        free(dist);
+        return -1;
+    }
+
+    int x = dist[dest];
     free(dist);
-    return -1;
-}
-
-int x = dist[dest];
-free(dist);
-return x;
+    return x;
 }
 
 //using Dijkstra Algorithm
@@ -143,6 +147,23 @@ void shortsPath_cmd(pnode head)
     printf("Dijsktra shortest path: %d \n", ans);
 }
 
+int *delete_from_array(int arr[], int length, int k)
+{
+    int *new_array = (int *)malloc(sizeof(int) * length - 1);
+    for (int i = 0, j = 0; i < length; i++)
+    {
+        if (i != k)
+        {
+            new_array[j] = arr[i];
+            j++;
+        }
+    }
+    return new_array;
+}
+
+
+
+
 void printArr(int arr[], int length)
 {
     for (int i = 0; i < length; i++)
@@ -150,6 +171,11 @@ void printArr(int arr[], int length)
 
     printf("\n");
 }
+
+
+
+
+
 
 int helper(pnode head, int src, int arr[], int length)
 {
@@ -160,22 +186,34 @@ int helper(pnode head, int src, int arr[], int length)
 
     for (int i = 0; i < length; i++)
     {
-        if (arr[i] != src)
+        if (i != src)
         {
+            int *p = delete_from_array(arr, length, i);
+
             int _shortest = Dijkstra_Algorithm(head, src, arr[i]);
 
-            int ans = helper(head, arr[i], arr, length);
+            int ans = helper(head, arr[i], p, length - 1);
 
             if (_shortest != -1 && ans != -1 && ans + _shortest < min)
                 min = ans + _shortest;
+
+            free(p);
         }
     }
 
     if (min == INFINITY)
         return -1;
 
+
+
+
     return min;
 }
+
+
+
+
+
 
 void TSP_cmd(pnode head)
 {
@@ -185,17 +223,25 @@ void TSP_cmd(pnode head)
     int *arr = (int *)malloc(sizeof(int) * length);
 
     for (int i = 0; i < length; i++)
-        scanf("%d", &arr[i]);           
+        scanf("%d", &arr[i]);
 
     int min = INFINITY;
     for (int i = 0; i < length; i++)
     {
-        int tsp = helper(head, arr[i], arr, length);
+        int *p = delete_from_array(arr, length, i);
+        int tsp = helper(head, arr[i], p, length - 1);
         if (tsp != -1 && min > tsp)
         {
             min = tsp;
         }
+
+
+        free(p);
     }
+
+
+
+
 
     if (min == INFINITY)
     {
@@ -205,6 +251,11 @@ void TSP_cmd(pnode head)
     {
         printf("TSP shortest path: %d \n", min);
     }
+
+
+
+
+
 
     free(arr);
 }
