@@ -1,17 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-
 #include "graph.h"
 #include "edges.h"
-
-
-
-
-
-
-
-
 
 //Helping function used in other functions
 pnode get_node(pnode NODE, int ID)//return the node (getting the node)
@@ -33,7 +23,7 @@ void insert_node_cmd(pnode *head)
 
     pnode new_node = get_node(*head, ID);
 
-    int is_there_node = 0;
+    int noode = 0;
 
 
     if (new_node == NULL)
@@ -50,7 +40,7 @@ void insert_node_cmd(pnode *head)
 
     else
     {
-        is_there_node = 1;
+        noode = 1;
         remove_out(new_node);
     }
 
@@ -62,7 +52,7 @@ void insert_node_cmd(pnode *head)
         add_edge(new_node, get_node(*head, dest), weight);
     }
 
-    if (is_there_node)
+    if (noode)
         return;
 
     if (!*head)
