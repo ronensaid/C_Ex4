@@ -173,8 +173,6 @@ void printArr(int arr[], int length)
 }
 
 
-
-
 int helper(pnode head, int src, int arr[], int length)
 {
     int **dp = (int **)malloc(sizeof(int *) * length);
@@ -224,6 +222,8 @@ int tspHelper(pnode head, int src, int arr[], int n, int mask, int **dp)
 }
 
 
+
+
 // int helper(pnode head, int src, int arr[], int length)
 // {
 //     if (length == 1)
@@ -261,7 +261,9 @@ int tspHelper(pnode head, int src, int arr[], int n, int mask, int **dp)
 
 
 
-void TSP_cmd(pnode head) {
+
+void TSP_cmd(pnode head)
+{
     int length;
     scanf("%d", &length);//getting the size 
 
@@ -271,73 +273,25 @@ void TSP_cmd(pnode head) {
         scanf("%d", &arr[i]);
 
     int min = INFINITY;
-    int **dist = (int **)malloc(sizeof(int *) * length);
     for (int i = 0; i < length; i++)
-        dist[i] = (int *)malloc(sizeof(int) * length);
-
-    // finding the shortest path between every pair of nodes
-    for (int i = 0; i < length; i++) {
-        for (int j = 0; j < length; j++) {
-            if (i == j)
-                dist[i][j] = 0;
-            else
-                dist[i][j] = Dijkstra_Algorithm(head, arr[i], arr[j]);
-        }
-    }
-
-    // finding the shortest Hamiltonian cycle
-    for (int i = 0; i < length; i++) {
-        int tsp = 0;
-        for (int j = 0; j < length - 1; j++) {
-            tsp += dist[i][j];
-        }
-        if (tsp != -1 && min > tsp) {
+    {
+        int *p = delete_from_array(arr, length, i);
+        int tsp = helper(head, arr[i], p, length - 1);
+        if (tsp != -1 && min > tsp)
+        {
             min = tsp;
         }
-    }
 
-    if (min == INFINITY) {
+
+        free(p);
+    }
+    if (min == INFINITY)
+    {
         printf("TSP shortest path: -1 \n");
-    } else {
+    }
+    else
+    {
         printf("TSP shortest path: %d \n", min);
     }
-
     free(arr);
-    for (int i = 0; i < length; i++)
-        free(dist[i]);
-    free(dist);
 }
-
-// void TSP_cmd(pnode head)
-// {
-//     int length;
-//     scanf("%d", &length);//getting the size 
-
-//     int *arr = (int *)malloc(sizeof(int) * length);
-
-//     for (int i = 0; i < length; i++)
-//         scanf("%d", &arr[i]);
-
-//     int min = INFINITY;
-//     for (int i = 0; i < length; i++)
-//     {
-//         int *p = delete_from_array(arr, length, i);
-//         int tsp = helper(head, arr[i], p, length - 1);
-//         if (tsp != -1 && min > tsp)
-//         {
-//             min = tsp;
-//         }
-
-
-//         free(p);
-//     }
-//     if (min == INFINITY)
-//     {
-//         printf("TSP shortest path: -1 \n");
-//     }
-//     else
-//     {
-//         printf("TSP shortest path: %d \n", min);
-//     }
-//     free(arr);
-// }
