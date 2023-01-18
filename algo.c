@@ -175,40 +175,87 @@ void printArr(int arr[], int length)
 
 
 
-
-
 int helper(pnode head, int src, int arr[], int length)
 {
-    if (length == 1)
-        return Dijkstra_Algorithm(head, src, arr[0]);
-
-    int min = INFINITY;
+    int **dp = (int **)malloc(sizeof(int *) * length);
+    for (int i = 0; i < length; i++)
+        dp[i] = (int *)malloc(sizeof(int) * (1 << length));
 
     for (int i = 0; i < length; i++)
     {
-        if (i != src)
+        for (int j = 0; j < (1 << length); j++)
         {
-            int *p = delete_from_array(arr, length, i);
-
-            int _shortest = Dijkstra_Algorithm(head, src, arr[i]);
-
-            int ans = helper(head, arr[i], p, length - 1);
-
-            if (_shortest != -1 && ans != -1 && ans + _shortest < min)
-                min = ans + _shortest;
-
-            free(p);
+            dp[i][j] = -1;
         }
     }
 
-    if (min == INFINITY)
-        return -1;
+    int ans = tspHelper(head, src, arr, length, 0, dp);
 
+    for (int i = 0; i < length; i++)
+        free(dp[i]);
+    free(dp);
 
-
-
-    return min;
+    return ans;
 }
+
+int tspHelper(pnode head, int src, int arr[], int n, int mask, int **dp)
+{
+    if (mask == (1 << n) - 1)
+        return Dijkstra_Algorithm(head, src, arr[0]);
+
+    if (dp[src][mask] != -1)
+        return dp[src][mask];
+
+    int min = INT_MAX;
+    for (int i = 0; i < n; i++)
+    {
+        if (!(mask & (1 << i)))
+        {
+            int newSrc = arr[i];
+            int _shortest = Dijkstra_Algorithm(head, src, newSrc);
+            if (_shortest != -1)
+            {
+                int ans = _shortest + tspHelper(head, newSrc, arr, n, mask | (1 << i), dp);
+                min = min > ans ? ans : min;
+            }
+        }
+    }
+    return dp[src][mask] = min;
+}
+
+
+// int helper(pnode head, int src, int arr[], int length)
+// {
+//     if (length == 1)
+//         return Dijkstra_Algorithm(head, src, arr[0]);
+
+//     int min = INFINITY;
+
+//     for (int i = 0; i < length; i++)
+//     {
+//         if (i != src)
+//         {
+//             int *p = delete_from_array(arr, length, i);
+
+//             int _shortest = Dijkstra_Algorithm(head, src, arr[i]);
+
+//             int ans = helper(head, arr[i], p, length - 1);
+
+//             if (_shortest != -1 && ans != -1 && ans + _shortest < min)
+//                 min = ans + _shortest;
+
+//             free(p);
+//         }
+//     }
+
+//     if (min == INFINITY)
+//         return -1;
+
+
+
+
+//     return min;
+// }
 
 
 
