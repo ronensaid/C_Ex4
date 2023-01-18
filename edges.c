@@ -12,35 +12,27 @@
 
 
 
-//Adding an edge (source,destination,weight)
-void add_edge(pnode Src, pnode Dest, int Weight)
-{
-    if (!Src || !Dest)
+void add_edge(pnode src, pnode dest, int Weight) 
+ {
+    if (!src || !dest)
         return;
     
     pedge new_edge = (pedge)malloc(sizeof(edge));
-
     new_edge->next = NULL;
+    new_edge->weight = weight;
+    new_edge->dest = dest;
+    pedge edge = Src->edges;
 
-    new_edge->weight = Weight;
-
-    new_edge->endpoint = Dest;
-
-    pedge EDG = Src->edges;
-
-    while (EDG && EDG->next)
-    {
-
-        EDG = EDG->next;
+    while (edge && edge->next) {
+        edge = edge->next;
     }
 
-    if (!EDG)
-    {
-        Src->edges = new_edge;
+    if (!edge) {
+        src->edges = new_edge;
         return;
     }
 
-    EDG->next = new_edge;
+    edge->next = new_edge;
 }
 
 
