@@ -7,7 +7,7 @@
 
 
 
-void main()
+int main()
 {
 
     
@@ -75,5 +75,5 @@ void main()
     
     
      deleteGraph_cmd(&G);
-    
+    return 0;
 }
