@@ -7,7 +7,6 @@
 #define INFINITY 9999999 //used in Dijkstra's Algorithm
 
 
-
 int maximum(pnode NODE)
 {
     if (NODE == NULL)
@@ -16,17 +15,17 @@ int maximum(pnode NODE)
     }
 
     int max = NODE->node_num;
-    while (NODE)
+    for (pnode temp = NODE; temp != NULL; temp = temp->next)
     {
-        if (NODE->node_num > max)
+        if (temp->node_num > max)
         {
-            max = NODE->node_num;
+            max = temp->node_num;
         }
-        NODE = NODE->next;
     }
 
     return max;
 }
+
 
 bool is_empty(int v[], int len)
 {
@@ -63,12 +62,6 @@ int minimum(int dist[], int v[], int len)
 
     return min;
 }
-
-
-
-
-
-
 
 int Dijkstra_Algorithm(pnode head, int src, int dest)
 {
@@ -177,15 +170,25 @@ void printArr(int arr[], int len)
 
 int helper(pnode head, int src, int arr[], int len)
 {
+    if (len == 1)
+        return Dijkstra_Algorithm(head, src, arr[0]);
+
     int min = INFINITY;
 
     for (int i = 0; i < len; i++)
     {
         if (i != src)
         {
+            int *p = delete_from_array(arr, len, i);
+
             int _shortest = Dijkstra_Algorithm(head, src, arr[i]);
-            if (_shortest != -1 && _shortest < min)
-                min = _shortest;
+
+            int ans = helper(head, arr[i], p, len - 1);
+
+            if (_shortest != -1 && ans != -1 && ans + _shortest < min)
+                min = ans + _shortest;
+
+            free(p);
         }
     }
 
@@ -194,7 +197,6 @@ int helper(pnode head, int src, int arr[], int len)
 
     return min;
 }
-
 
 
 
@@ -225,10 +227,6 @@ void TSP_cmd(pnode head)
 
         free(p);
     }
-
-
-
-
 
     if (min == INFINITY)
     {
