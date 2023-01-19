@@ -3,18 +3,17 @@
 #include "graph.h"
 #include "edges.h"
 
-//Helping function used in other functions
-pnode get_node(pnode NODE, int ID)//return the node (getting the node)
-{
-
-    while (NODE && NODE->node_num != ID)
-    {
+//Helping function used in other functions to get the node
+pnode get_node(pnode NODE, int ID) {
+    while (NODE) {
+        if (NODE->node_num == ID) {
+            return NODE;
+        }
         NODE = NODE->next;
     }
-    if (!NODE)
-        return NULL;
-    return NODE;
+    return NULL;
 }
+
 
 void insert_node_cmd(pnode *head)
 {
@@ -68,7 +67,7 @@ void insert_node_cmd(pnode *head)
     }
     p->next = new_node;
 }
-
+ 
 void delete_node_cmd(pnode *head)
 {
     if (*head == NULL)
