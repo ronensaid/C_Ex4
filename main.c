@@ -68,7 +68,7 @@ int main()
             else if (choose=='T'){
                 TSP_cmd(G);
             }
-            
+            check=0;
         }
     }
     
