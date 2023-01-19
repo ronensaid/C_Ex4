@@ -1,49 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-
 #include "graph.h"
 #include "nodes.h"
 
-
-
-
-
-
-
-
-//Adding an edge (source,destination,weight)
 void add_edge(pnode Src, pnode Dest, int Weight)
 {
     if (!Src || !Dest)
         return;
     
     pedge new_edge = (pedge)malloc(sizeof(edge));
-
-    new_edge->next = NULL;
-
     new_edge->weight = Weight;
-
     new_edge->endpoint = Dest;
 
-    pedge EDG = Src->edges;
-
-    while (EDG && EDG->next)
-    {
-
-        EDG = EDG->next;
-    }
-
-    if (!EDG)
-    {
-        Src->edges = new_edge;
-        return;
-    }
-
-    EDG->next = new_edge;
+    new_edge->next = Src->edges;
+    Src->edges = new_edge;
 }
-
-
 
 
 //printing the edges
@@ -82,9 +53,6 @@ void delete(pnode n)
     n->edges = NULL;
 }
 
-
-
-
 void remove_edge(pnode NODE, pnode n)
 {
     if (NODE == NULL)
@@ -122,5 +90,3 @@ void remove_edge(pnode NODE, pnode n)
         free(e);
     }
 }
-
-
