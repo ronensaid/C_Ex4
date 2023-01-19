@@ -13,4 +13,4 @@ void printGraph_cmd(pnode head);
   
 void deleteGraph_cmd(pnode *head);
   
-void build_graph_cmd(pnode *head);
+char build_graph_cmd(pnode *head);

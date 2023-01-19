@@ -135,7 +135,8 @@ void deleteGraph_cmd(pnode *head)
 
     *head = NULL;
 }
-void build_graph_cmd(pnode *head)
+
+char build_graph_cmd(pnode *head)
 {
     if (*head)
         deleteGraph_cmd(head);
@@ -185,4 +186,9 @@ void build_graph_cmd(pnode *head)
             condition = 0;
         }
     }
+
+
+
+
+    return C;
 }
