@@ -11,11 +11,11 @@ int main()
 {
 
     
-    char ch;
+    char choose;
 
     int check = 1;
     
-    int temp = 0;
+    int cout = 0;
 
 
     //graph
@@ -25,9 +25,9 @@ int main()
 
     while (check)
     {
-        if (!temp)
+        if (!cout)
         {
-            int in = scanf(" %c", &ch);
+            int in = scanf(" %c", &choose);
             if (in == 0 || in == -1)
             {
                 check = 0;
@@ -35,37 +35,37 @@ int main()
         }
         if (check)
         {
-            temp = 0;
+            cout = 0;
             
             
-            if(ch=='A'){
-                ch = build_graph_cmd(&G);
-                temp = 1;
+            if(choose=='A'){
+                build_graph_cmd(&G);
+                cout = 1;
                 
             }
 
-            else if (ch=='B'){
+            else if (choose=='B'){
                 insert_node_cmd(&G);
             
             }
 
 
-            else if (ch=='D'){
+            else if (choose=='D'){
                 delete_node_cmd(&G);
             }
 
 
-            else if (ch=='P'){
+            else if (choose=='P'){
                 printGraph_cmd(G);
             }
 
 
-            else if (ch=='S'){
+            else if (choose=='S'){
                 shortsPath_cmd(G);
                 }
 
 
-            else if (ch=='T'){
+            else if (choose=='T'){
                 TSP_cmd(G);
             }
             
