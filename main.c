@@ -41,7 +41,7 @@ int main()
             if(choose=='A'){
                 build_graph_cmd(&G);
                 cout = 1;
-                
+                break;
             }
 
             else if (choose=='B'){
