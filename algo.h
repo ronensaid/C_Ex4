@@ -9,3 +9,5 @@ int *delete_from_array(int arr[], int len, int k);
 void printArr(int arr[], int len);
 int helper(pnode head, int src, int arr[], int len);
 void TSP_cmd(pnode head);
+bool next_permutation(int *arr, int size)
+
