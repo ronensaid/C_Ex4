@@ -17,26 +17,19 @@ void add_edge(pnode Src, pnode Dest, int Weight)
 }
 
 
-//printing the edges
 void print_edges(pnode node)
 {
     if (node == NULL)
         return;
 
-    pedge Edge = node->edges;
-    
     printf("node %d edges are :\n", node->node_num);
 
-
-
-
+    pedge Edge = node->edges;
     while (Edge)
     {
-        printf("id %d weight %d , ", Edge->endpoint->node_num, Edge->weight);
-        
+        printf("id: %d, weight: %d\n", Edge->endpoint->node_num, Edge->weight);
         Edge = Edge->next;
     }
-    printf("\n");
 }
 
 
