@@ -39,9 +39,9 @@ int main()
             
             
             if(choose=='A'){
-                build_graph_cmd(&G);
+                choose = build_graph_cmd(&G);
                 cout = 1;
-             
+                
             }
 
             else if (choose=='B'){
@@ -68,11 +68,12 @@ int main()
             else if (choose=='T'){
                 TSP_cmd(G);
             }
-            check=0;
+            
         }
     }
     
     
     
      deleteGraph_cmd(&G);
+    return 0;
 }
