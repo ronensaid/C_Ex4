@@ -41,27 +41,18 @@ bool is_empty(int v[], int len)
 
 
 
-int minimum(int dist[], int v[], int len)
-{
-    int min = -1;
-
-    for (int i = 0; i < len; i++)
-    {
-        if (min == -1)
-        {
-            if (dist[i] != INFINITY && !v[i])
-                min = i;
+int minimum(int dist[], int v[], int len) {
+    int min = INT_MAX;
+    int min_index = -1;
+    for (int i = 0; i < len; i++) {
+        if (!v[i] && dist[i] < min) {
+            min = dist[i];
+            min_index = i;
         }
-
-
-        else if (dist[i] != INFINITY && dist[i] < dist[min] && !v[i])
-            min = i;
     }
-
-
-
-    return min;
+    return min_index;
 }
+
 
 int Dijkstra_Algorithm(pnode head, int src, int dest)
 {
