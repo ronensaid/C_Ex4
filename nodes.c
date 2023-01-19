@@ -187,5 +187,8 @@ void build_graph_cmd(pnode *head)
         }
     }
 
-   
+
+
+
+    return C;
 }
