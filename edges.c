@@ -35,51 +35,51 @@ void print_edges(pnode node)
 
 void delete(pnode n)
 {
-    // delete out edges
-    pedge ed = n->edges;
-    while (ed)
+    if (!n) return;
+
+    pedge current = n->edges;
+    pedge previous = NULL;
+
+    while (current)
     {
-        pedge e = ed;
-        ed = ed->next;
-        free(e);
+        previous = current;
+        current = current->next;
+        free(previous);
     }
     n->edges = NULL;
 }
 
-void remove_edge(pnode NODE, pnode n)
-{
+
+void remove_edge(pnode NODE, pnode n) {
     if (NODE == NULL)
         return;
 
-    
-    while (NODE)//deleting the coming edges
-    {
-        pedge p = NODE->edges;
-        pedge *previous = &NODE->edges;
-        while (p)
-        {
-            if (p->endpoint == n)
-            {
-                *previous = p->next;
+    // Delete edges coming into 'n'
+    pedge p = NODE->edges;
+    while (NODE) {
+        pedge previous = NULL;
+        while (p) {
+            if (p->endpoint == n) {
+                if (previous) {
+                    previous->next = p->next;
+                } else {
+                    NODE->edges = p->next;
+                }
                 free(p);
-                p = *previous;
+                break;
             }
-            else
-            {
-                previous = &(p->next);
-                p = p->next;
-            }
+            previous = p;
+            p = p->next;
         }
-
         NODE = NODE->next;
     }
 
-    
-    pedge ed = n->edges;//deleting going out edges
-    while (ed)
-    {
-        pedge e = ed;
-        ed = ed->next;
-        free(e);
+    // Delete edges going out of 'n'
+    p = n->edges;
+    while (p) {
+        pedge next = p->next;
+        free(p);
+        p = next;
     }
+    n->edges = NULL;
 }
